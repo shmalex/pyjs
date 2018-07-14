@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "name": "pyjs",
+  "private": true,
+  "devDependencies": {
+    "express": "latest",
+    "jquery": "latest",
+    "jsdom": "latest",
+    "cors": "latest",
+    "cheerio": "latest",
+    "request": "latest",
+    "underscore": "latest",
+    "mysql": "latest",
+    "signalrjs": "latest",
+    "hipchatter": "latest",
+    "tinyreq": "latest",
+    "pm2": "2.6.1",
+    "node-uuid": "latest"
+  },
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "elasticsearch": "13.2.0",
+    "express": "^3.21.2",
+    "imagemin": "^5.3.1",
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-pngquant": "^5.0.1",
+    "pm2": "2.6.1",
+    "promise": "8.0.1",
+    "pug": "^2.0.3"
+  }
+}
