@@ -22,42 +22,134 @@
 
 <body>
     <div class="container">
-        <div class="jumbotron">
+        <div class="">
             <h2>Kaplan–Meier estimator</h2>
-            <p class="lead">Insert data tab separated data below!</p>
+            <p class="lead">Insert data tab separated data below</p>
+            <p>Expected to have:
+                <code>T</code> column for Time,
+                <code>E</code> column for event,
+                <code>group</code> column for groups</p>
         </div>
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="list-group">
-                    <textarea rows="15" id='data' style="font-family: monospace; width:100%;"></textarea>
+                    <textarea rows="25" id='data' style="font-family: monospace; width:50%;">T	E	group
+6.0	1	miR-137
+13.0	1	miR-137
+13.0	1	miR-137
+13.0	1	miR-137
+19.0	1	miR-137
+19.0	1	miR-137
+19.0	1	miR-137
+26.0	1	miR-137
+26.0	1	miR-137
+26.0	1	miR-137
+126.0	1	miR-137
+126.0	1	miR-137
+133.0	1	miR-137
+133.0	1	miR-137
+147.0	1	miR-137
+162.0	1	miR-137
+162.0	1	miR-137
+19.0	1	miR-137
+19.0	1	miR-137
+19.0	1	miR-137
+215.0	1	miR-137
+215.0	1	miR-137
+222.0	1	miR-137
+222.0	1	miR-137
+222.0	1	miR-137
+222.0	1	miR-137
+229.0	1	miR-137
+229.0	1	miR-137
+229.0	1	miR-137
+229.0	1	miR-137
+329.0	1	miR-137
+336.0	1	miR-137
+336.0	1	miR-137
+343.0	1	miR-137
+333.0	1	control
+354.0	1	control
+354.0	1	control
+361.0	1	control
+361.0	1	control
+361.0	0	control
+461.0	1	control
+461.0	0	control
+461.0	1	control
+461.0	1	control
+461.0	1	control
+461.0	1	control
+461.0	1	control
+461.0	1	control
+469.0	1	control
+469.0	1	control
+569.0	1	control
+569.0	1	control
+569.0	1	control</textarea>
+                    <span style="width:50%;float: right; padding-left: 10px;" id='image-subproc'></span>
                 </div>
             </div>
         </div>
         <div class="row">
             <span style="max-width:50%">
-                <input type="submit" value="Submit sub process" id='sub_proc' />
+                Alpha:
+                <input type="radio" id="ninefive" name="alpha" checked value=".95" />
+                <label for="ninefive">0.95</label>
+                <input type="radio" id="ninenine" name="alpha" value=".99" />
+                <label for="ninenine">0.99</label>
             </span>
             <span style="max-width:50%">
-                <input type="submit" value="Submit sub service" id='sub_srvc' />
-            </span>
-        </div>
-        <div class="row">
-            <span style="max-width:50%" id='image-subproc'>
-            </span>
-            <span style="max-width:50%" id='image-service'>
+                <input type="submit" value="Submit sub process" id='sub_proc' />
             </span>
         </div>
     </div>
-    </div>
+    <fieldset>
+        <legend>Changes</legend>
+        <ol>
+            <li>We are using example data but we don’t need entire table – only few columns are used in the data analysis – please
+                print only those columns which are used so it would be easy to edit them in the text field</li>
+            <ul>
+                <li>
+                    Genotypes and number of days survived in Drosophila
+                    <code>from lifelines.datasets import load_waltons</code>
+                </li>
+            </ul>
+            <li>We need to see comparison of survival between 2 groups. You have only one group.</li>
+            <ul>
+                <li>
+                    that sample has
+                    <i>miR-137</i> and
+                    <i>control</i> groups
+                    <sub>parse the column names and pass to server</sub>
+                </li>
+            </ul>
+            <li>There is no p-value – you can print it anywhere but very often it’s printed right on the top of the plot.</li>
+            <ul>
+                <li> added display on the top p-value and alpha</li>
+            </ul>
+            <li>I had to fix manually paths that are hard-coded in the code.</li>
+            <ul>
+                <li>fixed the path</li>
+            </ul>
+            <li>The analysis should be done using Python3. Maybe on your laptop when you run python it runs python3 by default
+                – it’s not the case for me, it runs python2 and it’s not working.
+            </li>
+            <ul>
+                <li>Explicitly calls the pytho3 program</li>
+            </ul>
+        </ol>
+    </fieldset>
+
     <script>
         $(window).ready(function () {
             console.log('ready')
             $('#sub_proc').click(function (e) {
                 console.log('sub_proc')
-                $('#image-subproc').html('')
+                $('#image-subproc').html('<img src="/static/Loading_icon.gif"/>')
                 data = $('#data').val()
-                $.post('/subproc', { data: data }, function (data) {
+                alpha = $('input[name=alpha]:checked').val();
+                $.post('/subproc', { data: data, alpha: alpha }, function (data) {
                     $('#image-subproc').html(data)
                 })
             })

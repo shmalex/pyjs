@@ -2,7 +2,6 @@
 
 const express = require('express');
 const app = express();
-const spawn = require("child_process").spawn;
 const childProcess = require("child_process");
 const fs = require('fs');
 
@@ -16,11 +15,9 @@ function mySpawn() {
     return result;
 }
 
-console.log(process.cwd())
+app.working_dir = process.cwd()
 
-//app.set('view engine', 'pug')
 app.set('view engine', 'ejs')
-
 app.use('/static', express.static('public'))
 app.use(express.bodyParser());
 
@@ -31,9 +28,10 @@ app.get('/', function (req, res) {
 
 app.post('/subproc', function (req, res) {
     var data = req.body.data
+    var alpha = req.body.alpha
     console.log(data.length)
     var crypto = require('crypto');
-    var hex = crypto.createHash('md5').update(data).digest("hex");
+    var hex = crypto.createHash('md5').update(data).digest("hex") + (alpha.replace('.', '_'))
     var path = process.cwd() + '/data/' + hex + '.csv'
     console.log(path)
 
@@ -44,9 +42,10 @@ app.post('/subproc', function (req, res) {
         }
 
         console.log("The file was saved!");
-        var swapArgs = ['kme.py', path]
-        var prc = childProcess.spawn('python', swapArgs, {
-            cwd: '/home/shmalex/Desktop/py/projects/pyjs/py/'
+        var swapArgs = ['kme.py', path, alpha]
+
+        var prc = childProcess.spawn('python3', swapArgs, {
+            cwd: app.working_dir + '/../py/'
         });
 
         prc.stdout.setEncoding('utf8');
@@ -58,7 +57,7 @@ app.post('/subproc', function (req, res) {
                 res.send('<img src="http://localhost:1080/static/kme/' + hex + '.png" />')
                 return
             } else {
-                res.send('it was :' + str + '-')
+                res.send('<p> error occure :' + str + '</p>')
                 return
             }
         });
