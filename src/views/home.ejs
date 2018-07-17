@@ -104,42 +104,6 @@
             </span>
         </div>
     </div>
-    <fieldset>
-        <legend>Changes</legend>
-        <ol>
-            <li>We are using example data but we don’t need entire table – only few columns are used in the data analysis – please
-                print only those columns which are used so it would be easy to edit them in the text field</li>
-            <ul>
-                <li>
-                    Genotypes and number of days survived in Drosophila
-                    <code>from lifelines.datasets import load_waltons</code>
-                </li>
-            </ul>
-            <li>We need to see comparison of survival between 2 groups. You have only one group.</li>
-            <ul>
-                <li>
-                    that sample has
-                    <i>miR-137</i> and
-                    <i>control</i> groups
-                    <sub>parse the column names and pass to server</sub>
-                </li>
-            </ul>
-            <li>There is no p-value – you can print it anywhere but very often it’s printed right on the top of the plot.</li>
-            <ul>
-                <li> added display on the top p-value and alpha</li>
-            </ul>
-            <li>I had to fix manually paths that are hard-coded in the code.</li>
-            <ul>
-                <li>fixed the path</li>
-            </ul>
-            <li>The analysis should be done using Python3. Maybe on your laptop when you run python it runs python3 by default
-                – it’s not the case for me, it runs python2 and it’s not working.
-            </li>
-            <ul>
-                <li>Explicitly calls the pytho3 program</li>
-            </ul>
-        </ol>
-    </fieldset>
 
     <script>
         $(window).ready(function () {
@@ -159,6 +123,7 @@
                 data = $('#data').val()
             })
 
+            /* hande the tabs*/
             $("textarea").keydown(function (e) {
                 if (e.keyCode === 9) { // tab was pressed
                     // get caret position/selection

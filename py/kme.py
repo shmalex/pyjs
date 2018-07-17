@@ -9,24 +9,37 @@ from lifelines.statistics import logrank_test
 
 
 def plot_two_groups(data, t_col_name, e_col_name, g_name, alpha):
+    '''
+    functino to render the 2 groups and calculate the p values
+    '''
     T = data[t_col_name]
     E = data[e_col_name]
 
     groups = df[g_name]
+
+    # get unique groups to get 1st and 2nd groups names
     uniques = df[g_name].unique()
+
     ix = (groups == uniques[0])
+
     kmf = KaplanMeierFitter()
+    # plot first group
     kmf.fit(T[~ix], E[~ix], label=uniques[1])
     ax = kmf.plot()
 
+    # plot second group
     kmf.fit(T[ix], E[ix], label=uniques[0])
     kmf.plot(ax=ax)
+    # get resoults for p Values
     results = logrank_test(T[ix], T[~ix], E[ix], E[~ix], alpha=alpha)
     plt.title(
         'p-value: {0:.4f}, alpha: {1:.2f}'.format(results.p_value, alpha))
 
 
 def plot_one_groupd(data, t_col_name, e_col_name, label):
+    '''
+    plost the KM for one group with given lable
+    '''
     T = data[t_col_name]
     E = data[e_col_name]
     kmf = KaplanMeierFitter()
@@ -55,6 +68,7 @@ def read_arguments():
         raise BaseException('error - data file `' +
                             file_name+'` not found not exists')
 
+    # the aplha argument could be optional
     alpha = .95
     if len(sys.argv) == 3:
         try:
@@ -72,10 +86,15 @@ def read_arguments():
 
 if __name__ == '__main__':
     try:
+        # read arguments
         file_name, time_col, event_col, groups_column, alpha = read_arguments()
+        # read the data
         df = pd.read_csv(file_name, sep='\t')
+
+        # get the unique columns
         uniques = df[groups_column].unique()
 
+        # decide what to plot
         if len(uniques) == 1:
             plot_one_groupd(df, time_col, event_col, uniques[0])
         elif len(uniques) == 2:
@@ -85,11 +104,13 @@ if __name__ == '__main__':
             # the error driven by the data
             raise 'Model don\'t suport more then 2 groups'
 
+        # have the png file
         name = os.path.split(file_name)[1].split('.')[0]
         plt.savefig('../src/public/kme/'+name)
         print('ok')
 
     except Exception as ex:
+        # print error
         print(ex)
         print('error')
     sys.stdout.flush()
